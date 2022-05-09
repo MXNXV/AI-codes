@@ -1,0 +1,161 @@
+from collections import defaultdict
+
+class Graph:
+    def __init__(self):
+        self.graph = defaultdict(list)
+    
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+
+    def DFSUtil(self, v, visited):
+        visited.add(v)
+        print(v , end = " ")
+
+        for neighbour in self.graph[v]:
+            if neighbour not in visited:
+                self.DFSUtil(neighbour, visited)
+
+    def DFS(self, v):
+        visited = set()
+        self.DFSUtil(v, visited)
+
+g = Graph()
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 0)
+g.addEdge(2, 3)
+g.addEdge(3, 3)
+
+g.DFS(2)
+
+--------------------------------------------------------------------------------------------------------------------
+
+from collections import defaultdict
+
+class Graph:
+    def __init__(self):
+        self.graph = defaultdict(list)
+    
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+    
+    def BFS(self, s):
+        visited = [False]* (max(self.graph)+1)
+        queue = []
+        queue.append(s)
+        visited[s] = True
+        while queue:
+            s = queue.pop(0)
+            print(s, end = "")
+            
+            for i in self.graph[s]:
+                if visited[i] == False:
+                    queue.append(i)
+                    visited[i] = True
+        
+
+g = Graph()
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 0)
+g.addEdge(2, 3)
+g.addEdge(3, 3)
+
+g.BFS(2)
+
+-------------------------------------------------------------------------------------------------------------------
+
+def printJS(arr, t):
+    n = len(arr)
+    # Sorting in descending order of profit
+    for i in range(n):
+        for j in range(n-1-i):
+            if arr[j][2]<arr[j+1][2]:
+                arr[j],arr[j+1] = arr[j+1],arr[j]
+    
+    result = [False]*t
+    job = ['-1']*t
+
+    for i in range(len(arr)):
+        for j in range(min(t-1, arr[i][1]-1), -1, -1):
+            if result[j] is False:
+                result[j] = True
+                job[j] = arr[i][0]
+                break
+    print(job)
+
+arr = [['a', 2, 100],
+       ['b', 1, 19],
+       ['c', 2, 27],
+       ['d', 1, 25],
+       ['e', 3, 15]]
+print("The maximum profit is as follows: ")
+
+printJS(arr, 3)
+
+-------------------------------------------------------------------------------------------------------------------
+global N
+N = 4
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j] ,end = " ")
+        print()
+
+def isSafe(board, row, col):
+    #  check left values
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    # Check upper left diagonal
+    for i,j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    # Check lower left diagonal
+    for i,j in zip(range(row, N, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+
+
+def solveNQUtil(board, col):
+    if col>=N:
+        return True
+    
+    for i in range(N):
+        if isSafe(board, i, col):
+            board[i][col] =1
+            
+            if solveNQUtil(board, col+1) == True:
+                return True
+
+            board[i][col] = 0
+    return False
+
+def solveNQ():
+    board = [[0,0,0,0],
+             [0,0,0,0],
+             [0,0,0,0],
+             [0,0,0,0]]
+    print("The blank board is: ")
+    printSolution(board)
+    if solveNQUtil(board, 0) == False:
+        print('No solution Found')
+        return False
+    print("The solution is: ")
+    printSolution(board)
+
+solveNQ()
+
+-------------------------------------------------------------------------------------------------------------------
+
+from chatterbot import ChatBot
+from chatterbot import ChatterBotCorpusTrainer
+chatbot = ChatBot("Greeting")
+trainer = ChatterBotCorpusTrainer(chatbot)
+trainer.train('chatterbot.corpus.english.greetings',
+'chatterbot.corpus.english.conversations')
+response = chatbot.get_response('Wht is your number')
+print(response)
